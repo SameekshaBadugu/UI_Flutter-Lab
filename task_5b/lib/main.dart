@@ -1,22 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'counter_model.dart';
 
 void main() {
   runApp(
     ChangeNotifierProvider(
-      create: (_) => RatingProvider(),
+      create: (context) => CounterModel(),
       child: const MyApp(),
     ),
   );
-}
-
-class RatingProvider extends ChangeNotifier {
-  int rating = 0;
-
-  void setRating(int value) {
-    rating = value;
-    notifyListeners();
-  }
 }
 
 class MyApp extends StatelessWidget {
@@ -24,68 +16,52 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const RatingPage(),
+      home: CounterPage(),
     );
   }
 }
 
-class RatingPage extends StatelessWidget {
-  const RatingPage({super.key});
+class CounterPage extends StatelessWidget {
+  const CounterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<RatingProvider>(context);
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Sameeksha - 24WH1A05C5"),
+        title: const Text("Counter App - 24WH1A05C5_SAMEEKSHA"),
+        backgroundColor: Colors.blue,
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-
-            const Text(
-              "Provider State Management",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            Row(
+        child: Consumer<CounterModel>(
+          builder: (context, counterModel, child) {
+            return Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(5, (index) {
-                return IconButton(
-                  onPressed: () {
-                    provider.setRating(index + 1);
-                  },
-                  icon: Icon(
-                    provider.rating >= index + 1
-                        ? Icons.star
-                        : Icons.star_border,
-                    color: Colors.yellow,
-                    size: 50,
+              children: [
+                const Text(
+                  "You have pushed the button this many times:",
+                  style: TextStyle(fontSize: 20),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  "${counterModel.counter}",
+                  style: const TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
                   ),
-                );
-              }),
-            ),
-
-            const SizedBox(height: 20),
-
-            Text(
-              "Rating: ${provider.rating} / 5",
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
+                ),
+              ],
+            );
+          },
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Provider.of<CounterModel>(context, listen: false).increment();
+        },
+        tooltip: "Increment",
+        child: const Icon(Icons.add),
       ),
     );
   }
