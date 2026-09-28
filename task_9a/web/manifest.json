@@ -1,6 +1,6 @@
 {
-    "name": "fetch_data_app",
-    "short_name": "fetch_data_app",
+    "name": "task_9a",
+    "short_name": "task_9a",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
